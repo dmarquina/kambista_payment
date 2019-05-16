@@ -1,0 +1,116 @@
+<mat-horizontal-stepper [linear]="isLinear" labelPosition="bottom" #stepper>
+    <!-- begin - Initial step-->
+    <mat-step [stepControl]="initialFormGroup" [editable]="false" [completed]=true>
+        <form [formGroup]="initialFormGroup">
+            <ng-template matStepLabel>Credenciales</ng-template>
+            <h2 class="instructions-title">Ingresa tus cedenciales.</h2>
+            <mat-card class="row">
+                <h3 class="card-title">Credenciales</h3>
+                <mat-form-field class="col s12 m6">
+                    <input matInput placeholder="Usuario" formControlName="usernameCtrl" required>
+                </mat-form-field>
+                <mat-form-field class="col s12 m6">
+                    <input matInput type="password" placeholder="Password" formControlName="passwordCtrl" required>
+                </mat-form-field>
+                <div class="col push-s6 push-m7 push-l10">
+                    <button mat-raised-button color="primary" (click)="login()" matStepperNext>CONTINUAR</button>
+                </div>
+            </mat-card>
+        </form>
+    </mat-step>
+    <!-- end - Initial step-->
+    <!-- begin - First step-->
+    <mat-step [stepControl]="firstFormGroup" [editable]="false">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Datos personales</ng-template>
+            <h2 class="instructions-title">Ingresa tus datos personales o selecciona un usuario previamente utilizado. </h2>
+            <mat-card class="row">
+                <h3 class="card-title">Datos personales</h3>
+                <mat-form-field class="col s12 m6">
+                    <input matInput placeholder="Nombre" formControlName="nameCtrl" required>
+                </mat-form-field>
+                <mat-form-field class="col s12 m6">
+                    <input matInput placeholder="Correo" formControlName="emailCtrl" required>
+                </mat-form-field>
+                <mat-form-field class="col s12 m6">
+                    <mat-label>Tipo de documento</mat-label>
+                    <mat-select formControlName="docTypeCtrl">
+                        <mat-option value="DNI">DNI</mat-option>
+                        <mat-option value="PAS">PASAPORTE</mat-option>
+                        <mat-option value="CE">CARNET DE EXTRANJERIA</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col s12 m6">
+                    <input matInput placeholder="Número de documento" formControlName="docNumberCtrl" required>
+                </mat-form-field>
+                <div class="col push-s6 push-m7 push-l10">
+                    <button mat-raised-button color="second" (click)="enableEditingUser()">EDITAR</button>
+                    <button mat-raised-button color="primary" (click)="saveUser()" matStepperNext>CONTINUAR</button>
+                </div>
+            </mat-card>
+            <mat-card class="row">
+                <h3 class="card-title">Usuarios previos</h3>
+                <mat-action-list *ngFor="let u of users">
+                    <button mat-list-item (click)="selectUser(u.id)"> {{u.name}} </button>
+                </mat-action-list>
+            </mat-card>
+        </form>
+    </mat-step>
+    <!-- end - First step-->
+    <!-- begin - Second step -  -->
+    <mat-step [stepControl]="secondFormGroup" [editable]="false">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Método de pago</ng-template>
+            <h2 class="instructions-title">Ingresa un método de pago o selecciona un método de pago previamente utilizado. </h2>
+            <mat-card class="row">
+                <h3 class="card-title">Método de pago</h3>
+                <mat-form-field class="col s12 m6">
+                    <mat-label>País del pago</mat-label>
+                    <mat-select formControlName="countryCtrl">
+                        <mat-option value="USA">USA</mat-option>
+                        <mat-option value="PERU">PERÚ</mat-option>
+                        <mat-option value="MEXICO">MÉXICO</mat-option>
+                        <mat-option value="PANAMA">PANAMÁ</mat-option>
+                        <mat-option value="URUGUAY">URUGUAY</mat-option>
+                        <mat-option value="BRASIL">BRASIL</mat-option>
+                        <mat-option value="ARGENTINA">ARGENTINA</mat-option>
+                        <mat-option value="BOLIVIA">BOLIVIA</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="col s12 m6">
+                    <input matInput placeholder="Tipo de moneda" formControlName="currencyCtrl" required>
+                </mat-form-field>
+
+                <div class="col push-s6 push-m7 push-l10">
+                    <button mat-raised-button color="second" (click)="enableEditingPaymentMethod()">EDITAR</button>
+                    <button mat-raised-button color="primary" (click)="savePaymentMethod()" matStepperNext>CONTINUAR</button>
+                </div>
+            </mat-card>
+
+            <mat-card class="row">
+                <h3 class="card-title">Métodos de pagos previos</h3>
+                <mat-action-list *ngFor="let p of paymentMethods">
+                    <button mat-list-item (click)="selectPaymentMethod(p.id)">{{p.country}} - {{p.currency}}</button>
+                </mat-action-list>
+            </mat-card>
+        </form>
+    </mat-step>
+    <!-- end - Second step-->
+    <!-- begin - Last step-->
+    <mat-step [stepControl]="firstFormGroup">
+        <ng-template matStepLabel>Pago completado</ng-template>
+        <div class="finish-message">
+            <div class="row">
+                <div class="col m10">
+                    <mat-icon class="finish-icon">check_circle_outline</mat-icon>
+                </div>
+            </div>
+            <div class="row">
+                <p>PAGO COMPLETADO CORRECTAMENTE</p>
+            </div>
+            <button mat-raised-button color="primary" (click)="refresh()"> NUEVO PAGO </button>
+        </div>
+    </mat-step>
+    <!-- end - Last step-->
+</mat-horizontal-stepper>
